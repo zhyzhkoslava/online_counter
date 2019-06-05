@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  web:
+    build: .
+    volumes:
+    - ./:/var/www/site/
+    ports:
+    - 8080:80
+    working_dir: /var/www/site/
+    links:
+    - php
+  php:
+    image: webdevops/php-dev:7.2
+    volumes:
+    - ./:/var/www/site/
+    working_dir: /var/www/site
+  db:
+    image: mysql:5.7
+    command: --explicit_defaults_for_timestamp
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: password
+    ports:
+    - 33060:3306
+    volumes:
+    - /var/lib/mysql
